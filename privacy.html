@@ -56,6 +56,12 @@
     }
     p { margin: 0; white-space: pre-line; }
     a { color: var(--pink); font-weight: 600; text-decoration: underline; }
+    #copied {
+      margin: 8px 0 0;
+      color: var(--pink);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
     footer {
       text-align: center;
       color: var(--muted);
@@ -156,7 +162,30 @@
       <h2>13. Contact Us</h2>
       <p>If you have any questions about this Privacy Policy or want to exercise your rights, please contact:
 
-<a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=support@andham.app" target="_blank" rel="noopener">support@andham.app</a></p>
+<a id="support-email" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=support@andham.app" target="_blank" rel="noopener">support@andham.app</a></p>
+    <p id="copied" hidden>Email copied</p>
+    <script>
+      const link = document.getElementById('support-email');
+      const note = document.getElementById('copied');
+      let hold;
+      async function copyEmail(event) {
+        if (event) event.preventDefault();
+        try {
+          await navigator.clipboard.writeText('support@andham.app');
+        } catch (error) {
+          return;
+        }
+        note.hidden = false;
+        clearTimeout(copyEmail.hideTimer);
+        copyEmail.hideTimer = setTimeout(function () { note.hidden = true; }, 2000);
+      }
+      link.addEventListener('contextmenu', copyEmail);
+      link.addEventListener('touchstart', function () {
+        hold = setTimeout(function () { copyEmail(); }, 500);
+      }, { passive: true });
+      link.addEventListener('touchend', function () { clearTimeout(hold); });
+      link.addEventListener('touchmove', function () { clearTimeout(hold); });
+    </script>
     </section>
     <footer>© 2026 Andham. All rights reserved.</footer>
   </main>
